@@ -19,7 +19,6 @@ export class CharactersListPage implements OnInit {
   ngOnInit(): void {
     this.hpService.getAllCharacters().subscribe({
       next: (data) => {
-        // บางตัวละครไม่มีรูปภาพ อาจจะกรองเฉพาะคนที่มีรูปก็ได้
         this.characters = data; 
         this.isLoading = false;
       },
