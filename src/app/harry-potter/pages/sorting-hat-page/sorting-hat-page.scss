@@ -1,15 +1,30 @@
-$color-gold: #e9c46a;
+/* 🎩 Sorting Hat Page — Artifact Wrapper */
 
-/* ================= CONTAINER ================= */
-.sorting-hat-container {
+$color-gold: #e9c46a;
+$font-title: 'Cinzel', serif;
+$font-body: 'Crimson Pro', serif;
+
+:host {
+  display: block;
+}
+
+/* จัด Container ให้อยู่กึ่งกลาง มีความขลังและโปร่งสบาย */
+:host > div {
+  position: relative;
   max-width: 42rem;
   margin: 2.5rem auto;
-  padding: 2rem;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(16px);
-  border-radius: 1.5rem;
-  border: 1px solid rgba(251, 191, 36, 0.3);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  padding: 3rem;
+  background: rgba(15, 23, 42, 0.85); 
+  backdrop-filter: blur(20px);
+  border-radius: 2rem;
+  overflow: hidden;
+  
+  /* ✨ Border สีทองสว่างและแสงฟุ้งภายใน */
+  border: 2px solid $color-gold;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(233, 196, 106, 0.1);
+  
+  /* ✨ แอนิเมชันตอนเปิดหน้าเว็บ */
+  animation: entranceMagic 1.2s cubic-bezier(0.22, 1, 0.36, 1);
   color: #e2e8f0;
 }
 
@@ -20,19 +35,21 @@ $color-gold: #e9c46a;
 }
 
 .hat-icon {
-  font-size: 4.5rem;
+  font-size: 6rem;
   display: block;
-  margin-bottom: 1.5rem;
-  filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.4));
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  margin: 0 auto 1.5rem;
+  
+  /* ✨ เพิ่ม Glow และแอนิเมชันหมวกพูดได้ */
+  filter: drop-shadow(0 0 25px $color-gold);
+  animation: hatTalk 3s ease-in-out infinite;
 }
 
 .sorting-hat-title {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-family: 'Cinzel', serif;
+  letter-spacing: 0.2em;
+  font-family: 'Cinzel Decorative', serif;
   background: linear-gradient(to right, #fde68a, #f59e0b, #d97706);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -43,228 +60,148 @@ $color-gold: #e9c46a;
   color: rgba(253, 230, 138, 0.6);
   margin-top: 0.5rem;
   font-weight: 300;
-  letter-spacing: 0.15em;
-  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  font-size: 0.9rem;
   text-transform: uppercase;
 }
 
-/* ================= FORM ================= */
+/* ================= FORM CONTROLS ================= */
 .sorting-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
 }
 
 .form-label {
+  font-family: $font-title;
   font-weight: 600;
-  margin-bottom: 0.5rem;
   color: #f59e0b;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+  font-size: 1.1rem;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+  margin-left: 0.5rem;
 }
 
+/* ช่อง Input และ Select สไตล์พรีเมียม */
 .form-input,
 .form-select {
-  background: rgba(2, 6, 23, 0.5);
-  border: 1px solid rgba(251, 191, 36, 0.3);
-  padding: 1rem;
-  border-radius: 0.75rem;
-  color: #e2e8f0;
-  font-size: 1rem;
+  background: rgba(15, 23, 42, 0.4) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(251, 191, 36, 0.2) !important;
+  padding: 1.25rem 1.5rem !important;
+  border-radius: 1.2rem !important;
+  color: #f8fafc !important;
+  font-size: 1.05rem !important;
+  font-family: $font-body;
   outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-
-  &::placeholder {
-    color: #475569;
-  }
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 
   &:focus {
-    border-color: #fbbf24;
-    box-shadow: 0 0 0 1px #fbbf24;
+    border-color: #fbbf24 !important;
+    background: rgba(15, 23, 42, 0.7) !important;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+    transform: translateY(-2px);
   }
 }
 
-.form-select {
-  cursor: pointer;
-
-  option {
-    background: #0f172a;
-    color: #e2e8f0;
-  }
-}
-
+/* ปุ่มกดสวมหมวกคัดสรร */
 .submit-btn {
   width: 100%;
   margin-top: 2rem;
-  padding: 1rem 1.5rem;
-  border-radius: 0.75rem;
-  border: none;
-  background: linear-gradient(to right, #d97706, #fbbf24);
+  padding: 1.2rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #d97706, #fbbf24, #d97706);
+  background-size: 200% auto;
   color: #0f172a;
   font-weight: 900;
-  font-size: 1.125rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-family: 'Cinzel', serif;
+  letter-spacing: 0.2em;
+  font-family: $font-title;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 
   &:hover {
-    box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
-    transform: scale(1.02);
+    background-position: right center;
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.6);
+    transform: translateY(-3px);
   }
 }
 
-/* ================= RESULT ================= */
+/* ================= RESULT SECTION ================= */
 .result-section {
   text-align: center;
-  padding: 2.5rem 0;
-  animation: fadeIn 1s ease-out forwards;
-}
-
-.welcome-text {
-  font-size: 1.5rem;
-  font-weight: 300;
-  letter-spacing: 0.05em;
+  padding: 3rem 0;
+  animation: fadeIn 1s ease-out;
 }
 
 .user-name {
   font-weight: 700;
-  color: #fbbf24;
-  font-size: 2.25rem;
+  color: #fff;
+  font-size: 2.8rem;
   margin-top: 1rem;
   display: block;
-  font-family: 'Cinzel', serif;
-}
-
-.gold-line {
-  width: 6rem;
-  height: 1px;
-  margin: 1.5rem auto;
-  background: linear-gradient(to right, transparent, #f59e0b, transparent);
-}
-
-.result-intro {
-  color: #cbd5e1;
-  font-size: 1.125rem;
-  letter-spacing: 0.15em;
-}
-
-.house-reveal {
-  position: relative;
-  padding: 2rem 0;
-}
-
-.house-glow {
-  position: absolute;
-  inset: 0;
-  background: rgba(245, 158, 11, 0.1);
-  filter: blur(32px);
-  border-radius: 9999px;
+  font-family: 'Cinzel Decorative', serif;
+  text-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
 }
 
 .house-name {
-  position: relative;
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 900;
   text-transform: uppercase;
-  font-family: 'Cinzel', serif;
-  background: linear-gradient(to bottom, #fde68a, #d97706);
+  font-family: 'Cinzel Decorative', serif;
+  background: linear-gradient(to bottom, #fff 0%, $color-gold 50%, #8b5e1a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.8));
+  filter: drop-shadow(0 0 30px rgba(251, 191, 36, 1));
+  animation: revealHouse 2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* ================= MEMBERS ================= */
-.members-section {
-  margin-top: 2rem;
-  text-align: left;
-  max-height: 500px;
-  overflow-y: auto;
-  padding-right: 1rem;
+/* ================= ANIMATIONS ================= */
+@keyframes entranceMagic {
+  from { opacity: 0; transform: scale(0.9) translateY(40px); filter: blur(15px); }
+  to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
 }
 
-.members-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #f59e0b;
-  border-bottom: 1px solid rgba(251, 191, 36, 0.3);
-  padding-bottom: 0.5rem;
+@keyframes hatTalk {
+  0%, 100% { transform: rotate(-5deg) scale(1); }
+  50% { transform: rotate(5deg) scale(1.1); }
 }
 
-.members-loading {
-  text-align: center;
-  padding: 1rem 0;
-  color: #f59e0b;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+@keyframes revealHouse {
+  from { letter-spacing: 30px; opacity: 0; filter: blur(20px); transform: scale(0.8); }
+  to { letter-spacing: 0.1em; opacity: 1; filter: blur(0); transform: scale(1); }
 }
 
-.members-error {
-  text-align: center;
-  padding: 1rem 0;
-  color: #f87171;
-}
-
-.reset-btn {
-  margin-top: 2rem;
-  padding: 0.75rem 2rem;
-  border-radius: 9999px;
-  border: 1px solid #475569;
-  background: rgba(30, 41, 59, 0.8);
-  color: #cbd5e1;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: #334155;
-    color: #ffffff;
-  }
-}
-
-/* ================= SCROLLBAR ================= */
-.custom-scrollbar {
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.5);
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(245, 158, 11, 0.3);
-    border-radius: 10px;
-
-    &:hover {
-      background: rgba(245, 158, 11, 0.6);
-    }
-  }
-}
-
-/* ================= ANIMATION ================= */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================= RESPONSIVE ================= */
-@media (max-width: 768px) {
-  .sorting-hat-title {
-    font-size: 1.75rem;
-  }
+/* ================= OTHERS ================= */
+.reset-btn {
+  margin-top: 3rem;
+  padding: 1rem 2.5rem;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid $color-gold;
+  color: $color-gold;
+  font-family: $font-title;
+  transition: all 0.3s ease;
+  &:hover { background: rgba(233, 196, 106, 0.1); }
+}
 
-  .house-name {
-    font-size: 2.5rem;
-  }
+@media (max-width: 768px) {
+  .sorting-hat-title { font-size: 1.8rem; }
+  .house-name { font-size: 3rem; }
+  .user-name { font-size: 2rem; }
 }

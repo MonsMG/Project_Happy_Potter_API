@@ -1,5 +1,6 @@
-/* ================= GRID LAYOUT ================= */
-/* 🧠 Logic: ใช้ grid 2x2 เพื่อให้ได้ 4 ช่องเท่ากัน */
+/* ✨ กำหนดสีทองหลัก */
+$color-gold: #fbbf24;
+
 .houses-grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -12,89 +13,76 @@
 /* ================= CARD BASE ================= */
 .house-card {
   position: relative;
-  height: 220px;
+  height: 250px; /* ปรับให้สูงขึ้นนิดนึงเผื่อรูปขยาย */
   border-radius: 1.5rem;
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-decoration: none !important;
+  border: 1px solid rgba(251, 191, 36, 0.1);
+  background: rgba(15, 23, 42, 0.6);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-  text-decoration: none;
-  transition: all 0.3s ease;
-
-  /* 🧠 Logic: glass + dark theme */
-  background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(251, 191, 36, 0.2);
-
-  /* shadow ให้ดูมีมิติ */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-
-  &:hover {
-    transform: translateY(-8px) scale(1.03);
+  .house-emblem {
+    @apply h-32 object-contain mb-4 transition-transform duration-500;
+    filter: grayscale(20%);
   }
-}
 
-/* ================= EMBLEM ================= */
-.house-emblem {
-  width: 90px;
-  height: auto;
-  margin-bottom: 1rem;
-  transition: transform 0.3s ease;
-}
-
-.house-card:hover .house-emblem {
-  transform: scale(1.1) rotate(2deg);
-}
-
-/* ================= TITLE ================= */
 .house-title {
+  @apply relative;
   font-family: 'Cinzel Decorative', serif;
-  font-size: 1.5rem;
-  color: #fbbf24;
-  letter-spacing: 1px;
+  font-size: 1.8rem;
+  color: #fbbf24; /* สีทองสว่าง */
+  margin-top: 1rem;
+  letter-spacing: 2px;
+  text-decoration: none !important; /* ลบเส้นม่วงถาวร */
+  transition: all 0.4s ease; /* เตรียมตัวสำหรับ hover */
+
+  /* ✨ แอนิเมชันตัวหนังสืออมพลังเวทมนตร์เบาๆ */
+  animation: houseTitleGlow 4s ease-in-out infinite;
 }
 
-/* ================= HOUSE COLORS ================= */
-/* 🧠 Logic: แต่ละบ้านมี glow + border สีตัวเอง */
-
-.gryffindor-card {
-  border-color: rgba(220, 38, 38, 0.4);
-
+  /* 🎯 เอฟเฟกต์เวลา Hover: การ์ดพุ่งเข้าหาและเรืองแสง */
   &:hover {
-    box-shadow: 0 0 25px rgba(220, 38, 38, 0.6);
+    transform: translateY(-15px) scale(1.03);
+    background: rgba(15, 23, 42, 0.9);
+    
+    .house-emblem {
+      transform: scale(1.2) rotate(5deg);
+      filter: grayscale(0) drop-shadow(0 0 20px rgba(251, 191, 36, 0.6));
+    }
+
+      .house-title {
+      /* ✨ ชื่อบ้านพุ่งออกมาพร้อมแสงฟุ้งเว่อร์ */
+      transform: translateY(-5px);
+      text-shadow: 0 0 20px rgba(251, 191, 36, 1), 0 0 30px rgba(251, 191, 36, 0.4);
+      letter-spacing: 4px; /* ตัวอักษรขยายออก */
+    }
   }
 }
 
-.slytherin-card {
-  border-color: rgba(34, 197, 94, 0.4);
-
-  &:hover {
-    box-shadow: 0 0 25px rgba(34, 197, 94, 0.6);
-  }
+/* 🛡️ แสงเรืองแสงแยกตามสีบ้านเวลา Hover */
+.gryffindor-card:hover { 
+  border-color: #740001; 
+  box-shadow: 0 15px 40px rgba(116, 0, 1, 0.4); 
+}
+.slytherin-card:hover { 
+  border-color: #1a472a; 
+  box-shadow: 0 15px 40px rgba(26, 71, 42, 0.4); 
+}
+.ravenclaw-card:hover { 
+  border-color: #0e1a40; 
+  box-shadow: 0 15px 40px rgba(14, 26, 64, 0.4); 
+}
+.hufflepuff-card:hover { 
+  border-color: #ecb939; 
+  box-shadow: 0 15px 40px rgba(236, 185, 57, 0.4); 
 }
 
-.ravenclaw-card {
-  border-color: rgba(59, 130, 246, 0.4);
-
-  &:hover {
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
-  }
-}
-
-.hufflepuff-card {
-  border-color: rgba(234, 179, 8, 0.4);
-
-  &:hover {
-    box-shadow: 0 0 25px rgba(234, 179, 8, 0.6);
-  }
-}
-
-/* ================= RESPONSIVE ================= */
-@media (max-width: 768px) {
-  .houses-grid-container {
-    grid-template-columns: 1fr; // 📱 มือถือ = 1 คอลัมน์
-  }
+/* 🔄 แอนิเมชันตัวอักษรหายใจ (Idling) */
+@keyframes houseTitleGlow {
+  0%, 100% { text-shadow: 0 0 8px rgba(251, 191, 36, 0.4); }
+  50% { text-shadow: 0 0 15px rgba(251, 191, 36, 0.7); }
 }
