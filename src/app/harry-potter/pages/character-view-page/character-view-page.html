@@ -1,1 +1,19 @@
-<p>character-view-page works!</p>
+<div class="py-4">
+  <div class="mb-8">
+    <a tabindex="0" (keydown.enter)="goBack()" (click)="goBack()" class="back-button cursor-pointer">
+      <span class="icon">←</span> Return to Roster
+    </a>
+  </div>
+
+  @if (characterData.isLoading()) {
+    <div class="text-center py-32 text-2xl text-amber-500/70 font-serif animate-pulse">
+      Searching the archives...
+    </div>
+  } @else if (characterData.error() || !characterData.value()) {
+    <div class="text-center py-32 text-xl text-red-400 font-serif">
+      Could not locate this wizard's record.
+    </div>
+  } @else {
+    <app-character-view [character]="characterData.value()!"></app-character-view>
+  }
+</div>

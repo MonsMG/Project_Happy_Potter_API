@@ -8,4 +8,5 @@ import { RouterLink } from '@angular/router';
   templateUrl: './houses-list.html',
   styleUrl: './houses-list.scss',
 })
-export class HousesList {}
+export class HousesList {
+}

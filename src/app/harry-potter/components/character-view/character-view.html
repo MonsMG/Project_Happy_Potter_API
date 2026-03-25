@@ -1,1 +1,76 @@
-<p>character-view works!</p>
+<div class="magical-dossier-card">
+  <div class="portrait-section">
+    <div class="image-frame">
+      <img
+        [src]="character().image || 'https://placehold.co/600x900/0f172a/e9c46a?text=Unknown+Face'"
+        [alt]="character().name"
+      />
+    </div>
+  </div>
+
+  <div class="details-section">
+    <h2 class="character-name">{{ character().name }}</h2>
+    <div class="gold-divider"></div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="label">House</span>
+        <span class="value">{{ character().house || 'Unknown' }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Ancestry</span>
+        <span class="value">{{ character().ancestry || 'Unknown' }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Species & Gender</span>
+        <span class="value">{{ character().species || 'Human' }} ({{ character().gender || 'Unknown' }})</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Date of Birth</span>
+        <span class="value">{{ character().dateOfBirth || 'Unknown' }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Traits</span>
+        <span class="value">
+          {{ character().eyeColour ? character().eyeColour + ' eyes, ' : '' }}
+          {{ character().hairColour ? character().hairColour + ' hair' : '' }}
+        </span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Status</span>
+        <span class="value">{{ character().alive ? 'Alive' : 'Deceased' }} / {{ character().wizard ? 'Wizard' : 'Muggle' }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="label">Patronus</span>
+        <span class="value capitalize">{{ character().patronus || 'None' }}</span>
+      </div>
+
+      @if (character().alternate_names.length > 0) {
+        <div class="info-item full-width">
+          <span class="label">Also Known As</span>
+          <span class="value">{{ character().alternate_names.join(', ') }}</span>
+        </div>
+      }
+
+      <div class="info-item full-width">
+        <span class="label">Wand Details</span>
+        <span class="value">
+          {{ character().wand.wood ? character().wand.wood + ' wood' : 'Unknown Wood' }}
+          {{ character().wand.core ? ' with ' + character().wand.core + ' core' : '' }}
+          {{ character().wand.length ? ' (' + character().wand.length + ' inches)' : '' }}
+        </span>
+      </div>
+
+      <div class="info-item full-width">
+        <span class="label">Played By</span>
+        <span class="value actor">{{ character().actor || 'Unknown Actor' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

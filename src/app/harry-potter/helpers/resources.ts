@@ -1,5 +1,3 @@
-// src/app/harry-potter/helpers/resources.ts
-
 import { Character, Spell } from '../types/api';
 
 const API_BASE_URL = 'https://hp-api.onrender.com/api';
@@ -44,7 +42,7 @@ export async function fetchSpellById(id: string): Promise<Spell> {
   const response = await fetch(`${API_BASE_URL}/spells`);
   if (!response.ok) throw new Error('Failed to fetch spells');
   const spells: Spell[] = await response.json();
-  const spell = spells.find(s => s.id === id);
+  const spell = spells.find((s) => s.id === id);
   if (!spell) throw new Error(`Spell not found: ${id}`);
   return spell;
 }

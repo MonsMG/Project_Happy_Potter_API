@@ -4,7 +4,7 @@
     <div class="content-body">
       
       <div class="page-header">
-        <a routerLink="/spells" class="back-link">← กลับหน้าคาถา</a>
+        <a tabindex="0" (keydown.enter)="goBack()" (click)="goBack()" class="back-link cursor-pointer">← ย้อนกลับ</a>
         <div class="artifact-divider"></div>
       </div>
 

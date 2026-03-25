@@ -112,6 +112,17 @@
         </h1>
       </div>
 
+      <div class="mt-8 text-left max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+        <h4 class="text-xl font-semibold mb-4 text-amber-500 border-b border-amber-500/30 pb-2">เพื่อนร่วมบ้านของคุณ</h4>
+        @if (houseMembersData.isLoading()) {
+          <div class="text-center py-4 text-amber-500 animate-pulse">🪄 กำลังรวบรวมรายชื่อ...</div>
+        } @else if (houseMembersData.error()) {
+          <div class="text-center py-4 text-red-400">⚠️ ไม่สามารถดึงรายชื่อได้</div>
+        } @else {
+          <app-houses-view [houses]="houseMembersData.value() ?? []"></app-houses-view>
+        }
+      </div>
+
       <button
         (click)="resetForm()"
         class="mt-8 bg-slate-800/80 border border-slate-600 text-slate-300 font-medium px-8 py-3 rounded-full hover:bg-slate-700 hover:text-white transition-colors"

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Character } from '../../types/api';
 
 @Component({
   selector: 'app-character-view',
@@ -7,4 +8,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './character-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CharacterView {}
+export class CharacterView {
+  // 🎯 รับข้อมูลตัวละครแค่ "1 ตัว" (ไม่ใช่ Array แล้วนะครับ)
+  readonly character = input.required<Character>();
+}

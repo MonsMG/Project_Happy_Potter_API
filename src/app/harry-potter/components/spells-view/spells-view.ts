@@ -11,5 +11,5 @@ import { RouterLink } from '@angular/router';
 })
 export class SpellsViewComponent {
   // รับข้อมูล List ของคาถามาจาก Page ด้วย Signal
-  spells = input.required<Spell[]>();
+  readonly spells = input.required<Spell[]>();
 }
