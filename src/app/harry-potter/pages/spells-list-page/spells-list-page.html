@@ -1,13 +1,52 @@
 <div class="spells-list-container">
   <div class="page-header">
     <h2 class="title">✨ คาถาทั้งหมด</h2>
-    <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" 
-           placeholder="🔍 ค้นหาชื่อคาถา..." class="search-input" />
+    <input
+      type="text"
+      [ngModel]="searchQuery()"
+      (ngModelChange)="onSearch($event)"
+      placeholder="🔍 ค้นหาชื่อคาถา..."
+      class="search-input"
+    />
   </div>
 
   @if (spellsData.isLoading()) {
     <div class="status">🪄 กำลังร่ายมนตร์...</div>
   } @else {
-    <app-spells-view [spells]="filteredSpells()" />
+    <app-spells-view [spells]="paginatedSpells()" />
+
+    @if (totalPages() > 1) {
+      <div class="pagination-controls">
+        <button
+          (click)="goToPage(currentPage() - 1)"
+          [disabled]="currentPage() === 1"
+          class="btn-page btn-nav-arrow"
+        >
+          ← ก่อนหน้า
+        </button>
+
+        @for (page of [].constructor(totalPages()); track $index) {
+          <button
+            (click)="goToPage($index + 1)"
+            [class.active]="currentPage() === $index + 1"
+            class="btn-page btn-page-number"
+          >
+            {{ $index + 1 }}
+          </button>
+        }
+
+        <button
+          (click)="goToPage(currentPage() + 1)"
+          [disabled]="currentPage() === totalPages()"
+          class="btn-page btn-nav-arrow"
+        >
+          ถัดไป →
+        </button>
+      </div>
+
+      <p class="pagination-summary">
+        หน้า {{ currentPage() }} จาก {{ totalPages() }} (ทั้งหมด {{ filteredSpells().length }} คาถา)
+      </p>
+    }
   }
 </div>

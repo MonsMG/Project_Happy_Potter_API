@@ -1,1 +1,62 @@
-<p>characters-list-page works!</p>
+<div class="page-container">
+  <div class="page-header">
+    <h2 class="page-title">Wizards & Witches</h2>
+    <div class="gold-divider"></div>
+    <p class="page-subtitle">ทำความรู้จักกับตัวละครทั้งหมดในจักรวาลเวทมนตร์</p>
+
+    <div class="search-wrapper">
+      <input
+        type="text"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="onSearch($event)"
+        placeholder="🔍 ค้นหาชื่อตัวละคร..."
+        class="search-input"
+      />
+    </div>
+  </div>
+
+  @if (charactersData.isLoading()) {
+    <div class="loading-state">
+      <span>🪄 กำลังร่ายมนตร์ดึงข้อมูล...</span>
+    </div>
+  } @else if (charactersData.error()) {
+    <div class="error-state">❌ เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง</div>
+  } @else {
+    <app-character-list [characters]="paginatedCharacters()"></app-character-list>
+
+    <!-- 🎯 Pagination Controls -->
+    @if (totalPages() > 1) {
+      <div class="pagination-controls">
+        <button
+          (click)="goToPage(currentPage() - 1)"
+          [disabled]="currentPage() === 1"
+          class="btn-page btn-nav-arrow"
+        >
+          ← ก่อนหน้า
+        </button>
+
+        @for (page of [].constructor(totalPages()); track $index) {
+          <button
+            (click)="goToPage($index + 1)"
+            [class.active]="currentPage() === $index + 1"
+            class="btn-page btn-page-number"
+          >
+            {{ $index + 1 }}
+          </button>
+        }
+
+        <button
+          (click)="goToPage(currentPage() + 1)"
+          [disabled]="currentPage() === totalPages()"
+          class="btn-page btn-nav-arrow"
+        >
+          ถัดไป →
+        </button>
+      </div>
+
+      <p class="pagination-summary">
+        หน้า {{ currentPage() }} จาก {{ totalPages() }} (ทั้งหมด {{ filteredCharacters().length }} ตัวละคร)
+      </p>
+    }
+  }
+</div>

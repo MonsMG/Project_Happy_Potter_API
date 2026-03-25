@@ -6,7 +6,7 @@
     <div class="content-body">
       <!-- ปุ่มกลับ + ชื่อบ้าน -->
       <div class="page-header">
-        <a routerLink="/houses" class="back-link">← กลับหน้าเลือกบ้าน</a>
+        <a tabindex="0" (keydown.enter)="goBack()" (click)="goBack()" class="back-link">← ย้อนกลับ</a>
         <h2 class="artifact-title">🛡️ บ้าน {{ houseName }}</h2>
         <div class="artifact-divider"></div>
       </div>
@@ -17,7 +17,42 @@
       } @else if (charactersData.error()) {
         <div class="error-state">⚠️ เกิดข้อผิดพลาดในการโหลดข้อมูล</div>
       } @else {
-        <app-houses-view [characters]="charactersData.value() ?? []"></app-houses-view>
+        <app-houses-view [characters]="paginatedCharacters()"></app-houses-view>
+
+        <!-- 🎯 Pagination Controls -->
+        @if (totalPages() > 1) {
+          <div class="pagination-controls">
+            <button
+              (click)="goToPage(currentPage() - 1)"
+              [disabled]="currentPage() === 1"
+              class="btn-page btn-nav-arrow"
+            >
+              ← ก่อนหน้า
+            </button>
+
+            @for (page of [].constructor(totalPages()); track $index) {
+              <button
+                (click)="goToPage($index + 1)"
+                [class.active]="currentPage() === $index + 1"
+                class="btn-page btn-page-number"
+              >
+                {{ $index + 1 }}
+              </button>
+            }
+
+            <button
+              (click)="goToPage(currentPage() + 1)"
+              [disabled]="currentPage() === totalPages()"
+              class="btn-page btn-nav-arrow"
+            >
+              ถัดไป →
+            </button>
+          </div>
+
+          <p class="pagination-summary">
+            หน้า {{ currentPage() }} จาก {{ totalPages() }} (ทั้งหมด {{ (charactersData.value() ?? []).length }} ตัวละคร)
+          </p>
+        }
       }
     </div>
   </section>

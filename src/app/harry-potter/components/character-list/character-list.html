@@ -1,1 +1,24 @@
-<p>character-list works!</p>
+<div class="character-grid">
+  @for (char of characters(); track char.id) {
+    <div class="magical-portrait-card">
+      <div class="image-wrapper">
+        <img
+          [src]="char.image || 'https://placehold.co/400x600/0f172a/e9c46a?text=Unknown'"
+          [alt]="char.name"
+        />
+        <div class="overlay"></div>
+      </div>
+
+      <div class="info-wrapper">
+        <a [routerLink]="['/characters', char.id]" class="name-link">
+          <h3 [title]="char.name">{{ char.name }}</h3>
+        </a>
+        <p class="actor-name">{{ char.actor || 'Unknown Actor' }}</p>
+      </div>
+    </div>
+  } @empty {
+    <div class="empty-state">
+      ...ไม่พบรายชื่อพ่อมดแม่มด...
+    </div>
+  }
+</div>

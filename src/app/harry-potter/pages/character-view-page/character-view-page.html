@@ -1,1 +1,19 @@
-<p>character-view-page works!</p>
+<div class="character-view-container">
+  <div class="back-button-wrapper">
+    <a tabindex="0" (keydown.enter)="goBack()" (click)="goBack()" class="back-button">
+      <span class="icon">←</span> Return to Roster
+    </a>
+  </div>
+
+  @if (characterData.isLoading()) {
+    <div class="loading-state">
+      Searching the archives...
+    </div>
+  } @else if (characterData.error() || !characterData.value()) {
+    <div class="error-state">
+      Could not locate this wizard's record.
+    </div>
+  } @else {
+    <app-character-view [character]="characterData.value()!"></app-character-view>
+  }
+</div>

@@ -1,13 +1,26 @@
-<<<<<<< Updated upstream
 $color-gold: #e9c46a;
 
 .houses-grid-container {
-  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 900px;
+  margin: 4rem auto;
+  padding: 1rem;
 }
 
+/* ================= CARD BASE ================= */
 .house-card {
-  // 🎯 สไตล์การ์ดหลัก: เรียบหรู พื้นหลังเข้ม ขอบทองจางๆ
-  @apply flex flex-col items-center p-10 rounded-2xl transition-all duration-400 border border-amber-500/30 bg-slate-950/50 shadow-xl;
+  position: relative;
+  height: 220px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   text-decoration: none;
 
   .house-emblem {
@@ -19,30 +32,9 @@ $color-gold: #e9c46a;
     color: #cbd5e1; // สี slate-300
     font-family: 'Cinzel Decorative', serif;
   }
-=======
-.houses-grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 3.5rem;
-  max-width: 1000px;
-  margin: 4rem auto;
-}
-
-.house-card {
-  position: relative;
-  height: 260px;
-  border-radius: 2.5rem;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(233, 196, 106, 0.2);
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: visible; /* ให้แสงฟุ้งออกมาได้ */
-  text-decoration: none !important; /* ✅ ลบเส้นใต้ลิงก์ออก */
->>>>>>> Stashed changes
 
   // ✨ เอฟเฟกต์เวลา Hover: การ์ดนูนขึ้น ขอบสว่างขึ้น และสีทองเรืองแสง
   &:hover {
-<<<<<<< Updated upstream
     @apply border-amber-500/50 -translate-y-3 bg-slate-900 shadow-[0_15px_40px_rgba(217,119,6,0.15)];
 
     .house-emblem {
