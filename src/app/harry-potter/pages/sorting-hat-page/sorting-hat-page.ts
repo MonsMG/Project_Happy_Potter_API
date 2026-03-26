@@ -1,61 +1,70 @@
-import { ChangeDetectionStrategy, Component, signal, resource } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { fetchCharactersByHouse } from '../../helpers/resources';
+import { Component, computed, resource, linkedSignal, signal } from '@angular/core';
+// 🎯 Import ฟีเจอร์ Form อนาคตจาก Angular
+import { FormField, form, submit } from '@angular/forms/signals';
 import { HousesView } from '../../components/houses-view/houses-view';
+import { fetchCharactersByHouse } from '../../helpers/resources';
 
 @Component({
   selector: 'app-sorting-hat-page',
-  imports: [FormsModule, HousesView],
+  standalone: true,
+  // 🎯 อย่าลืม import FormField เข้ามาใช้ใน HTML
+  imports: [HousesView, FormField],
   templateUrl: './sorting-hat-page.html',
   styleUrl: './sorting-hat-page.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SortingHatPage {
-  // ✨ สร้างสัญญาณ (Signals) ที่แก้ไขค่าได้ สำหรับเก็บค่าที่ผู้ใช้พิมพ์หรือเลือกในแบบฟอร์ม
-  userName = signal<string>('');
-  trait = signal<string>('');
-  animal = signal<string>('');
+  // Signal สำหรับเก็บผลลัพธ์ว่าได้บ้านอะไร
+  protected readonly sortedHouse = signal<string>('');
 
-  // ✨ Signal สำหรับเก็บผลลัพธ์การคัดสรรบ้านที่ได้
-  sortedHouse = signal<string>('');
+  // 🎯 1. สร้าง Form ด้วย Signal Forms API
+  protected readonly sortingForm = form(
+    linkedSignal(() => ({
+      userName: '',
+      trait: '',
+      animal: '',
+    })),
+  );
 
-  // 🎯 ดึงข้อมูลเพื่อนร่วมบ้านจาก API อัตโนมัติ ทันทีที่รู้ว่าตัวเองอยู่บ้านไหน (ใช้ resource())
-  houseMembersData = resource({
-    params: () => this.sortedHouse(), // ส่งชื่อบ้านที่ได้จากการคัดสรร
-    loader: async ({ params }) => {
-      if (!params) return []; // ถ้ายังไม่เริ่ม จะไม่ดึงข้อมูล
-      return await fetchCharactersByHouse(params.toLowerCase()); // เรียก API แยกตามบ้าน
-    }
+  // 🎯 2. Computed เช็คความถูกต้อง (อ่านค่าจาก form().value() ได้เลย)
+  protected readonly isFormValid = computed(() => {
+    const val = this.sortingForm().value();
+    return val.userName.trim() !== '' && val.trait !== '' && val.animal !== '';
   });
 
-  // ฟังก์ชันคำนวณและประมวลผลบ้านเมื่อกดส่งแบบฟอร์ม
-  sortHouse() {
-    // เช็คว่ากรอกข้อมูลครบทุกช่องหรือไม่
-    if (!this.userName() || !this.trait() || !this.animal()) {
-      alert('กรุณาตอบคำถามให้ครบก่อนสวมหมวกคัดสรร!');
-      return;
-    }
+  // 🎯 3. ดึงข้อมูลเพื่อนร่วมบ้าน (ใช้ Resource API ตามเดิม)
+  protected readonly houseMembersData = resource({
+    params: () => this.sortedHouse(),
+    loader: async ({ params }) => {
+      if (!params) return [];
+      return await fetchCharactersByHouse(params.toLowerCase());
+    },
+  });
 
-    const selectedTrait = this.trait();
-    const selectedAnimal = this.animal();
+  // 🎯 4. ฟังก์ชัน Submit โดยใช้ submit() จาก @angular/forms/signals
+  protected sortHouse(): void {
+    if (!this.isFormValid()) return;
 
-    // ลอจิกการคัดสรรบ้านแบบง่ายๆ
-    if (selectedTrait === 'brave' || selectedAnimal === 'lion') {
-      this.sortedHouse.set('Gryffindor');
-    } else if (selectedTrait === 'smart' || selectedAnimal === 'eagle') {
-      this.sortedHouse.set('Ravenclaw');
-    } else if (selectedTrait === 'loyal' || selectedAnimal === 'badger') {
-      this.sortedHouse.set('Hufflepuff');
-    } else {
-      this.sortedHouse.set('Slytherin');
-    }
+    submit(this.sortingForm, async (formState) => {
+      // ดึงค่าออกมาจาก formState
+      const houses = formState().value();
+
+      if (houses.trait === 'brave' || houses.animal === 'lion') {
+        this.sortedHouse.set('Gryffindor');
+      } else if (houses.trait === 'smart' || houses.animal === 'eagle') {
+        this.sortedHouse.set('Ravenclaw');
+      } else if (houses.trait === 'loyal' || houses.animal === 'badger') {
+        this.sortedHouse.set('Hufflepuff');
+      } else {
+        this.sortedHouse.set('Slytherin');
+      }
+    });
   }
 
-  // ฟังก์ชันกดย้อนกลับเพื่อรีเซ็ตค่าฟอร์ม และเล่นใหม่ตั้งแต่แรก
-  resetForm() {
-    this.userName.set(''); // ล้างชื่อ
-    this.trait.set(''); // ล้างจุดเด่น
-    this.animal.set(''); // ล้างสัตว์
-    this.sortedHouse.set(''); // ล้างผลลัพธ์บ้าน
+  // 🎯 5. ฟังก์ชัน Reset (เข้าถึง .value.set() ทีละฟิลด์ตามโครงสร้างใหม่)
+  protected resetForm(): void {
+    this.sortingForm.userName().value.set('');
+    this.sortingForm.trait().value.set('');
+    this.sortingForm.animal().value.set('');
+    this.sortedHouse.set('');
   }
 }

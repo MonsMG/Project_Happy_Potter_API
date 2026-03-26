@@ -1,11 +1,10 @@
 <div class="sorting-hat-container">
   <div class="sorting-hat-header">
-    <span class="hat-icon">🎩</span>
+    <span class="hat-icon animate-pulse">🎩</span>
     <h2 class="sorting-hat-title">หมวกคัดสรร</h2>
     <p class="sorting-hat-subtitle">Sorting Hat Ceremony</p>
   </div>
 
-  <!-- ตรวจสอบว่าถ้ายังไม่ได้ผลลัพธ์บ้าน จะให้แสดงแบบฟอร์มคำถาม -->
   @if (!sortedHouse()) {
     <form (submit)="sortHouse(); $event.preventDefault()" class="sorting-form">
       <div class="form-group">
@@ -13,25 +12,15 @@
         <input
           id="userNameInput"
           type="text"
-          [ngModel]="userName()"
-          (ngModelChange)="userName.set($event)"
-          name="userName"
+          [formField]="sortingForm.userName"
           placeholder="ระบุนามของคุณ..."
           class="form-input"
-          required
         />
       </div>
 
       <div class="form-group">
         <label for="traitInput" class="form-label">จุดเด่นในตัวตนของคุณ?</label>
-        <select
-          id="traitInput"
-          [ngModel]="trait()"
-          (ngModelChange)="trait.set($event)"
-          name="trait"
-          class="form-select"
-          required
-        >
+        <select id="traitInput" [formField]="sortingForm.trait" class="form-select">
           <option value="" disabled>-- โปรดเลือกจุดเด่น --</option>
           <option value="brave">ความกล้าหาญ (Brave)</option>
           <option value="smart">ความฉลาดหลักแหลม (Smart)</option>
@@ -42,14 +31,7 @@
 
       <div class="form-group">
         <label for="animalInput" class="form-label">สัตว์ผู้พิทักษ์ที่คุณผูกพัน?</label>
-        <select
-          id="animalInput"
-          [ngModel]="animal()"
-          (ngModelChange)="animal.set($event)"
-          name="animal"
-          class="form-select"
-          required
-        >
+        <select id="animalInput" [formField]="sortingForm.animal" class="form-select">
           <option value="" disabled>-- โปรดเลือกสัตว์วิเศษ --</option>
           <option value="lion">สิงโต (Lion)</option>
           <option value="eagle">นกอินทรี (Eagle)</option>
@@ -58,20 +40,25 @@
         </select>
       </div>
 
-      <button type="submit" class="submit-btn">
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="!isFormValid()"
+        [class.opacity-50]="!isFormValid()"
+        [class.cursor-not-allowed]="!isFormValid()"
+      >
         สวมหมวกคัดสรร!
       </button>
     </form>
   } @else {
-    <!-- แต่ถ้าคัดสรรได้บ้านแล้ว จะมาแสดงผลลัพธ์ด้านล่างนี้เลย -->
     <div class="result-section">
       <h3 class="welcome-text">
-        ยินดีต้อนรับสู่ฮอกวอตส์, <br /><span class="user-name">{{ userName() }}</span>!
+        ยินดีต้อนรับสู่ฮอกวอตส์, <br />
+        <span class="user-name">{{ sortingForm().value().userName }}</span
+        >!
       </h3>
       <div class="gold-line"></div>
-      <p class="result-intro">
-        หมวกคัดสรรได้ตัดสินใจแล้วว่า...<br />บ้านของคุณคือ!!
-      </p>
+      <p class="result-intro">หมวกคัดสรรได้ตัดสินใจแล้วว่า...<br />บ้านของคุณคือ!!</p>
 
       <div class="house-reveal">
         <div class="house-glow"></div>
@@ -80,20 +67,17 @@
 
       <div class="members-section custom-scrollbar">
         <h4 class="members-title">เพื่อนร่วมบ้านของคุณ</h4>
-        <!-- ดึงรายชื่อตัวละครในบ้านนั้นแบบคร่าวๆ มาแสดง โดยเช็คสถานะการโหลด -->
+
         @if (houseMembersData.isLoading()) {
           <div class="members-loading">🪄 กำลังรวบรวมรายชื่อ...</div>
         } @else if (houseMembersData.error()) {
           <div class="members-error">⚠️ ไม่สามารถดึงรายชื่อได้</div>
         } @else {
-          <!-- ใช้ Component ลูกเพื่อประหยัดเนื้อที่โค้ด -->
           <app-houses-view [characters]="houseMembersData.value() ?? []"></app-houses-view>
         }
       </div>
 
-      <button (click)="resetForm()" class="reset-btn">
-        กลับไปทำแบบทดสอบใหม่
-      </button>
+      <button (click)="resetForm()" class="reset-btn">กลับไปทำแบบทดสอบใหม่</button>
     </div>
   }
 </div>
